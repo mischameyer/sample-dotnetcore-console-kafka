@@ -10,6 +10,25 @@ namespace bookstore
     {
         static void Main(string[] args)
         {
+            int _numberOfMessages = 0;
+
+            if (args.Length == 0)
+            {
+                _numberOfMessages = 1;
+            }
+            else
+            {
+                try
+                {
+                    _numberOfMessages = Convert.ToInt32(args[0]);
+                }
+                catch
+                {
+                    Console.WriteLine("Invalid argument!");
+                    Environment.Exit(0);
+                }
+            }
+
             AutoResetEvent _closing = new AutoResetEvent(false);
 
             IProducer<string, string> producer = null;
@@ -17,7 +36,12 @@ namespace bookstore
 
             CreateConfig();
             CreateProducer();
-            SendMessage("testTopic", "This is a test42");
+
+            for(int i = 0; i < _numberOfMessages; i++)
+            {
+                SendMessage("testTopic", string.Format("This is a test: {0}", i));
+            }
+            
             Console.WriteLine("Press Ctrl+C to exit");
 
             Console.CancelKeyPress += new ConsoleCancelEventHandler(OnExit);
@@ -34,7 +58,7 @@ namespace bookstore
             {
                 producerConfig = new ProducerConfig
                 {
-                    BootstrapServers = "localhost:9092"
+                    BootstrapServers = "localhost:9092",                    
                 };
             }
 
