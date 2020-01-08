@@ -38,40 +38,28 @@ Under 'topics' you can create a new topic called 'testTopic' with 0 partitions.
 
 cd bookstore-producer
 
-dotnet run [arg = number] (i.e. dotnet run 11)
+dotnet run args[-newmsg, -topic, -partition]  (i.e. dotnet run -newmsg 24 -topic testTopicP12 -partition 12)
 
 The result should be like that:
 
-Press Ctrl+C to exit
-- Delivered 'This is a test: 4' to: testTopic [[0]] @1037
-- Delivered 'This is a test: 3' to: testTopic [[0]] @1036
-- Delivered 'This is a test: 5' to: testTopic [[0]] @1038
-- Delivered 'This is a test: 1' to: testTopic [[0]] @1034
-- Delivered 'This is a test: 6' to: testTopic [[0]] @1039
-- Delivered 'This is a test: 0' to: testTopic [[0]] @1033
-- Delivered 'This is a test: 2' to: testTopic [[0]] @1035
-- Delivered 'This is a test: 7' to: testTopic [[0]] @1040
-- Delivered 'This is a test: 8' to: testTopic [[0]] @1041
-- Delivered 'This is a test: 9' to: testTopic [[0]] @1042
-- Delivered 'This is a test: 10' to: testTopic [[0]] @1043
+- Press Ctrl+C to exit
+- Delivered 'This is a test: 5' to: testTopicP12 [[5]] @19
+- Delivered 'This is a test: 2' to: testTopicP12 [[2]] @14
+- Delivered 'This is a test: 17' to: testTopicP12 [[5]] @21
+- ...
 
 ### Step 4: Start the .NET Console Consumer (in separate Terminal):
 
 cd bookstore-consumer
 
-dotnet run
+dotnet run args[-topic, -group]  (i.e. dotnet run -topic testTopicP12 -group testTopic12)
 
 The result should be like that:
 
-Press Ctrl+C to exit
-- Message 'This is a test: 0' at: 'testTopic [[0]] @1033'.
-- Message 'This is a test: 1' at: 'testTopic [[0]] @1034'.
-- Message 'This is a test: 2' at: 'testTopic [[0]] @1035'.
-- Message 'This is a test: 3' at: 'testTopic [[0]] @1036'.
-- Message 'This is a test: 4' at: 'testTopic [[0]] @1037'.
-- Message 'This is a test: 5' at: 'testTopic [[0]] @1038'.
-- Message 'This is a test: 6' at: 'testTopic [[0]] @1039'.
-- Message 'This is a test: 7' at: 'testTopic [[0]] @1040'.
-- Message 'This is a test: 8' at: 'testTopic [[0]] @1041'.
-- Message 'This is a test: 9' at: 'testTopic [[0]] @1042'.
-- Message 'This is a test: 10' at: 'testTopic [[0]] @1043'.
+- Press Ctrl+C to exit
+- Topic: testTopicP12
+- Group: testTopic12
+- Message 'This is a test: 22' at: 'testTopicP12 [[10]] @10'.
+- Message 'This is a test: 10' at: 'testTopicP12 [[10]] @11'.
+- Message 'This is a test: 22' at: 'testTopicP12 [[10]] @12'.
+- ...
