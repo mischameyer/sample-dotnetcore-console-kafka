@@ -7,25 +7,25 @@ Two simple .net core console apps (producer & consumer) using Kafka as a message
 Install Kafka (latest version) on your local machine: [https://kafka.apache.org/downloads]
 
 ### Step 1.1: Start the Zookeeper Server (in separate Terminal):
-bin\windows\zookeeper-server-start.bat config/zookeeper.properties
+```bin\windows\zookeeper-server-start.bat config/zookeeper.properties```
 
 ### Step 1.2: Start the Kafka Server (in separate Terminal):
-bin\windows\kafka-server-start.bat config/server.properties
+```bin\windows\kafka-server-start.bat config/server.properties```
 
 ## Option 2 (with Docker): Start Zookeeper, Kafka-Server, Broker and Confluent with Docker
 
 ### Step 2.1: Clone Confluent-Examples from Github
-git clone https://github.com/confluentinc/examples/tree/5.3.1-post/cp-all-in-one
+```git clone https://github.com/confluentinc/examples/tree/5.3.1-post/cp-all-in-one```
 
 ### Step 2.2: Docker-Compose
 Make sure you have at least 8192MB Memory allocated in docker (Settings, Advanced).
 
-cd cp-all-in-one
+```cd cp-all-in-one```
 
-docker-compose up -d --build
+```docker-compose up -d --build```
 
 ### Step 2.3: Check State of Docker-Containers
-docker-compose ps
+```docker-compose ps```
 
 All states should have the value 'Up'
 
@@ -36,9 +36,9 @@ Under 'topics' you can create a new topic called 'testTopic' with 0 partitions.
 
 ### Step 3: Start the .NET Console Producer (in separate Terminal):
 
-cd bookstore-producer
+```cd bookstore-producer```
 
-dotnet run args[-newmsg, -topic, -partition]  (i.e. dotnet run -newmsg 24 -topic testTopicP12 -partition 12)
+dotnet run args[-newmsg, -topic, -partition]  (i.e. ```dotnet run -newmsg 24 -topic testTopicP12 -partition 12```)
 
 The result should be like that:
 
@@ -50,9 +50,9 @@ The result should be like that:
 
 ### Step 4: Start the .NET Console Consumer (in separate Terminal):
 
-cd bookstore-consumer
+```cd bookstore-consumer```
 
-dotnet run args[-topic, -group]  (i.e. dotnet run -topic testTopicP12 -group testTopic12)
+dotnet run args[-topic, -group]  (i.e. ```dotnet run -topic testTopicP12 -group testTopic12```)
 
 The result should be like that:
 
