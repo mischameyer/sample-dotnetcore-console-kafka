@@ -1,10 +1,10 @@
 # sample-dotnetcore-console-kafka
 Two simple .net core console apps (producer & consumer) using Kafka as a message broker. As addition you can use Confluent Control Center by using Option 2 (see below) with docker.
 
-## Precon:
-Install Kafka (latest version) on your local machine: [https://kafka.apache.org/downloads]
-
 ## Option 1 (manually): Start Zookeeper and Kafka-Server manually
+
+### Precon:
+Install Kafka (latest version) on your local machine: [https://kafka.apache.org/downloads]
 
 ### Step 1.1: Start the Zookeeper Server (in separate Terminal):
 bin\windows\zookeeper-server-start.bat config/zookeeper.properties
@@ -18,15 +18,16 @@ bin\windows\kafka-server-start.bat config/server.properties
 git clone https://github.com/confluentinc/examples/tree/5.3.1-post/cp-all-in-one
 
 ### Step 2.2: Docker-Compose
-make sure you have at least 8192MB Memory allocated in docker (Settings, Advanced).
+Make sure you have at least 8192MB Memory allocated in docker (Settings, Advanced).
 
 cd cp-all-in-one
+
 docker-compose up -d --build
 
 ### Step 2.3: Check State of Docker-Containers
 docker-compose ps
 
-Alle States have to be set to 'Up'
+All states should have the value 'Up'
 
 ### Step 2.4: Use Confluent Control Center
 Go to a webbrowser and start Confluent Control Center: localhost:9021
