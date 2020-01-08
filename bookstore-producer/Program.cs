@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Confluent.Kafka;
+using Microsoft.Extensions.Configuration;
 
 namespace bookstore
 {
@@ -10,7 +12,20 @@ namespace bookstore
     {
         static void Main(string[] args)
         {
+
+            var switchMappings = new Dictionary<string, string>()
+             {
+                 { "-newmsg", "key1" },
+                 { "-topic", "key2" },
+                 { "-partition", "key3" },
+             };
+            var builder = new ConfigurationBuilder();
+            builder.AddCommandLine(args, switchMappings);
+
+            var config = builder.Build();             
+
             int _numberOfMessages = 0;
+            int _numberOfPartitions = 1;
             int _maxNumberOfMessagesToDisplay = 100;
 
             if (args.Length == 0)
@@ -21,7 +36,8 @@ namespace bookstore
             {
                 try
                 {
-                    _numberOfMessages = Convert.ToInt32(args[0]);
+                    _numberOfMessages = Convert.ToInt32(config["Key1"]);
+                    _numberOfPartitions = Convert.ToInt32(config["Key3"]);
                 }
                 catch
                 {
@@ -40,7 +56,10 @@ namespace bookstore
 
             for(int i = 0; i < _numberOfMessages; i++)
             {
-                SendMessage("testTopic", string.Format("This is a test: {0}", i), _numberOfMessages < _maxNumberOfMessagesToDisplay ? true : false);
+                var _key = _numberOfPartitions == 0 ? 1 : i % _numberOfPartitions;
+                Console.WriteLine(_key);
+
+                SendMessage(!string.IsNullOrWhiteSpace(config["Key2"]) ? config["Key2"] : "testTopic", string.Format("This is a test: {0}", i), _numberOfMessages < _maxNumberOfMessagesToDisplay ? true : false, _key);
             }
             
             Console.WriteLine("Press Ctrl+C to exit");
@@ -69,15 +88,26 @@ namespace bookstore
                 producer = pb.Build();
             }
 
-            async void SendMessage(string topic, string message, bool display)
-            {
+            async void SendMessage(string topic, string message, bool display, int key)
+            {                
                 var msg = new Message<string, string>
                 {
-                    Key = null,
+                    Key = key.ToString(),
                     Value = message
                 };
 
-                var delRep = await producer.ProduceAsync(topic, msg);
+                DeliveryResult<string, string> delRep;
+
+                if (key > 1)
+                {
+                    var p = new Partition(key);
+                    var tp = new TopicPartition(topic, p);
+                    delRep = await producer.ProduceAsync(tp, msg);
+                } else
+                {
+                    delRep = await producer.ProduceAsync(topic, msg);
+                }
+                                                
                 var topicOffset = delRep.TopicPartitionOffset;
 
                 if (display) { Console.WriteLine($"Delivered '{delRep.Value}' to: {topicOffset}"); }

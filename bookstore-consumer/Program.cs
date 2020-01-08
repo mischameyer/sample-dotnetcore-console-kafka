@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using Confluent.Kafka;
+using Microsoft.Extensions.Configuration;
 
 namespace bookstore_consumer
 {
@@ -10,6 +11,17 @@ namespace bookstore_consumer
     {
         static void Main(string[] args)
         {
+
+            var switchMappings = new Dictionary<string, string>()
+             {                 
+                 { "-topic", "key1" },
+                 { "-group", "key2" },
+             };
+            var builder = new ConfigurationBuilder();
+            builder.AddCommandLine(args, switchMappings);
+
+            var config = builder.Build();
+
             CancellationTokenSource cts = new CancellationTokenSource();
             ConsumerConfig consumerConfig = null;
             
@@ -22,7 +34,7 @@ namespace bookstore_consumer
                 consumerConfig = new ConsumerConfig
                 {
                     BootstrapServers = "localhost:9092",
-                    GroupId = "test-group",
+                    GroupId = string.IsNullOrWhiteSpace(config["key2"]) ? "test-group" : config["key2"],
                     AutoOffsetReset = AutoOffsetReset.Earliest
                 };
             }
@@ -38,7 +50,10 @@ namespace bookstore_consumer
 
                 using (var consumer = cb.Build())
                 {
-                    consumer.Subscribe("testTopic");
+                    var _topic = !string.IsNullOrWhiteSpace(config["key1"]) ? config["key1"] : "testTopic";
+                    consumer.Subscribe(_topic);
+                    Console.WriteLine(string.Format("Topic: {0}", _topic));
+                    Console.WriteLine(string.Format("Group: {0}", consumerConfig.GroupId));
 
                     try
                     {

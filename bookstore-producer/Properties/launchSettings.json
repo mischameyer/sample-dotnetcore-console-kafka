@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "bookstore-producer": {
+      "commandName": "Project",
+      "commandLineArgs": "-newmsg 1 -topic name"
+    }
+  }
+}
