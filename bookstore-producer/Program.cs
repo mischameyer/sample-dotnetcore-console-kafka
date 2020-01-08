@@ -57,8 +57,7 @@ namespace bookstore
             for(int i = 0; i < _numberOfMessages; i++)
             {
                 var _key = _numberOfPartitions == 0 ? 1 : i % _numberOfPartitions;
-                Console.WriteLine(_key);
-
+                
                 SendMessage(!string.IsNullOrWhiteSpace(config["Key2"]) ? config["Key2"] : "testTopic", string.Format("This is a test: {0}", i), _numberOfMessages < _maxNumberOfMessagesToDisplay ? true : false, _key);
             }
             
