@@ -1,5 +1,5 @@
 # sample-dotnetcore-console-kafka
-Two simple .net core console apps (producer & consumer) using Kafka as a message broker. As addition you can use Confluent Control Center by using Option 2 (see below) with docker.
+Two simple .net core console apps (producer & consumer) using Kafka as a message broker. As addition you can use Confluent Control Center by using Option 2 (see below) with Docker.
 
 ## Option 1 (manually): Start Zookeeper and Kafka-Server manually
 
