@@ -11,6 +11,7 @@ namespace bookstore
         static void Main(string[] args)
         {
             int _numberOfMessages = 0;
+            int _maxNumberOfMessagesToDisplay = 100;
 
             if (args.Length == 0)
             {
@@ -39,7 +40,7 @@ namespace bookstore
 
             for(int i = 0; i < _numberOfMessages; i++)
             {
-                SendMessage("testTopic", string.Format("This is a test: {0}", i));
+                SendMessage("testTopic", string.Format("This is a test: {0}", i), _numberOfMessages < _maxNumberOfMessagesToDisplay ? true : false);
             }
             
             Console.WriteLine("Press Ctrl+C to exit");
@@ -68,7 +69,7 @@ namespace bookstore
                 producer = pb.Build();
             }
 
-            async void SendMessage(string topic, string message)
+            async void SendMessage(string topic, string message, bool display)
             {
                 var msg = new Message<string, string>
                 {
@@ -79,7 +80,7 @@ namespace bookstore
                 var delRep = await producer.ProduceAsync(topic, msg);
                 var topicOffset = delRep.TopicPartitionOffset;
 
-                Console.WriteLine($"Delivered '{delRep.Value}' to: {topicOffset}");
+                if (display) { Console.WriteLine($"Delivered '{delRep.Value}' to: {topicOffset}"); }
             }
 
         }
