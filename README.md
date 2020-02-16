@@ -15,7 +15,7 @@ Install Kafka (latest version) on your local machine: [https://kafka.apache.org/
 ## Option 2 (with Docker): Start Zookeeper, Kafka-Server, Broker and Confluent with Docker
 
 ### Step 2.1: Clone Confluent-Examples from Github
-```git clone https://github.com/confluentinc/examples/tree/5.3.1-post/cp-all-in-one```
+```git clone https://github.com/confluentinc/examples.git```
 
 ### Step 2.2: Docker-Compose
 Make sure you have at least 8192MB Memory allocated in docker (Settings, Advanced).
